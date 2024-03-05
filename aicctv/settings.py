@@ -180,13 +180,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Library Admin",
+    "site_title": "Aicamer Admin",
 
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Library",
+    "site_header": "Aicamer",
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "Library",
+    "site_brand": "Aicamer",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
     "site_logo": "books/img/logo.png",
@@ -204,10 +204,10 @@ JAZZMIN_SETTINGS = {
     "site_icon": None,
 
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to the library",
+    "welcome_sign": "Welcome to the Aicamer",
 
     # Copyright on the footer
-    "copyright": "Acme Library Ltd",
+    "copyright": "aicamer.com",
 
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string 
@@ -332,30 +332,31 @@ THUMBNAIL_ALIASES = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 # Define a session cookie name
-SESSION_COOKIE_NAME = 'aicctv'  # You can choose your own name
+SESSION_COOKIE_NAME = 'aicamer'  # You can choose your own name
 
 # Define the session cookie domain (e.g., 'localhost' for development)
-SESSION_COOKIE_DOMAIN = '127.0.0.1'  # Update this to your domain in a production environment
+SESSION_COOKIE_DOMAIN = 'aicamer.com'  # Update this to your domain in a production environment
 
 # Set the session age (timeout) in seconds
 SESSION_COOKIE_AGE = 3600  # Set it to your desired session timeout
 
 # Ensure the CSRF cookie is set to use the same domain
-CSRF_COOKIE_DOMAIN = '127.0.0.1'  # Update this to your domain in a production environment
+CSRF_COOKIE_DOMAIN = 'aicamer.com'  # Update this to your domain in a production environment
 
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Add the actual origin of your frontend application
-    "http://127.0.0.1:8000",  # Add the actual origin of your frontend application
-    "http://127.0.0.1:8080",  # Add the actual origin of your frontend application
-    "http://192.168.0.104",  # Add the actual origin of your frontend application
-    "http://192.168.0.104:8080",
-    "http://192.168.0.109:8080",
-    "http://192.168.0.105:8080",
+    "http://127.0.0.1:8000", 
+    "https://66.29.143.204:8000", 
+    "https://aicamer.com", 
+    "https://backend.aicamer.com", 
 ]
 CSRF_TRUSTED_ORIGINS = [
+   'https://aicamer.com', 
+  'https://backend.aicamer.com', 
   'http://127.0.0.1:8080',
+   'https://66.29.143.204:8000', 
   'http://127.0.0.1:8000',
   'http://192.168.0.109:8080',
   'http://192.168.0.105:8080',
