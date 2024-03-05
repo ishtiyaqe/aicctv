@@ -1,0 +1,2 @@
+{names: [HardHat, Mask, Safety_vest, vehicle], nc: 4, test: 'C:\\Users\\gisht\\Desktop\\web\\aicctv\protection-detaction-6\test',
+  train: 'C:\\Users\\gisht\\Desktop\\web\\aicctv\protection-detaction-6\train', val: 'C:\\Users\\gisht\\Desktop\\web\\aicctv\protection-detaction-6\valid'}

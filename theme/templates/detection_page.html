@@ -1,0 +1,52 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection</title>
+    <style>
+        #video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #video-stream {
+            max-width: 100%;
+            max-height: 100vh;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <label for="video-input">Video Source:</label>
+        <input type="text" id="video-input" placeholder="Enter video source URL">
+        <button onclick="startObjectDetection()">Start Detection</button>
+    </div>
+
+    <div id="video-container">
+        <img id="video-stream" >
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/detect_objects/');
+        const videoElement = document.getElementById('video-stream');
+
+        function startObjectDetection() {
+            const videoInput = document.getElementById('video-input').value;
+            socket.send(videoInput);
+        }
+
+        socket.onmessage = (event) => {
+            const frameBase64 = JSON.parse(event.data).frame;
+            const frameBytes = new Uint8Array(atob(frameBase64).split("").map(char => char.charCodeAt(0)));
+            const frameBlob = new Blob([frameBytes], { type: 'image/png' });
+            const frameUrl = URL.createObjectURL(frameBlob);
+            videoElement.src = frameUrl;
+        };
+    </script>
+</body>
+</html>

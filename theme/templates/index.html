@@ -1,0 +1,17 @@
+<!-- your_app/templates/your_app/index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera List</title>
+</head>
+<body>
+    <h2>Camera List</h2>
+
+    <ul>
+        {% for camera in cameras %}
+            <li><a href="{% url 'video_feed' camera.id %}">{{ camera.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

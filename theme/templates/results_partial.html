@@ -1,0 +1,38 @@
+{% for result in results_list %}
+    <div>
+        <h2>YOLOv8 Video Tracking Results for {{ result.source }}</h2>
+        <video controls width="640" height="480">
+            <source src="{{ result.video_path }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <canvas id="canvas_{{ result.source }}" width="640" height="480" style="border:1px solid #000;"></canvas>
+
+        <script>
+            var canvas = document.getElementById("canvas_{{ result.source }}");
+            var context = canvas.getContext("2d");
+
+            var video = document.querySelector("video");
+            video.addEventListener("play", function () {
+                var timer = setInterval(function () {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    // Draw bounding boxes for detected objects
+                    {% for box in result.boxes %}
+                        var x = {{ box[0] }};
+                        var y = {{ box[1] }};
+                        var width = {{ box[2] }};
+                        var height = {{ box[3] }};
+
+                        context.beginPath();
+                        context.rect(x, y, width, height);
+                        context.lineWidth = 2;
+                        context.strokeStyle = "red";
+                        context.fillStyle = "red";
+                        context.stroke();
+                    {% endfor %}
+                }, 100);
+            });
+        </script>
+    </div>
+{% endfor %}

@@ -1,0 +1,60 @@
+<!-- your_app/templates/your_app/add_camera.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Camera</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <h2>Add Camera</h2>
+
+    <form id="addCameraForm" method="post" action="{% url 'add_camera' %}">
+        {% csrf_token %}
+        <label for="camera_name">Camera Name:</label>
+        <input type="text" id="camera_name" name="camera_name" required>
+
+        <label for="video_source">Video Source URL:</label>
+        <input type="url" id="video_source" name="video_source" placeholder="Enter video source URL" required>
+
+        <button type="submit">Add Camera</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            $("#addCameraForm").submit(function (event) {
+                event.preventDefault();
+                var form = $(this);
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: form.serialize(),
+                    success: function (data) {
+                        // Start the video feed processing
+                        startVideoFeedProcessing(data.camera_id);
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            });
+
+            function startVideoFeedProcessing(cameraId) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "start_video_processing" %}?camera_id=' + cameraId,
+                    success: function (data) {
+                        // Handle success, e.g., display a message to the user
+                        console.log("Video feed processing started for camera: " + cameraId);
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
