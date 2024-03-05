@@ -1,0 +1,66 @@
+ {% extends "object_detection/index.html" %}
+{% block content %}
+
+
+
+<div class="flex justify-center p-4">
+
+  <div class="col-6 mx-auto">
+    <h3 class="text-center text-3xl font-bold">Register</h3>
+    <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      {% csrf_token %}
+
+      {% if message %}
+      <div class="alert alert-{{class}}">
+        {{message}}
+      </div>
+      {% endif %}
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Email
+        </label>
+        <input name="mobile"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="phone" type="text" maxlength="11" placeholder="017********">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Name
+        </label>
+        <input name="mobile"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="phone" type="text" maxlength="11" placeholder="017********">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Phone
+        </label>
+        <input name="mobile"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="phone" type="text" maxlength="11" placeholder="017********">
+      </div>
+      <div class="row">
+        <div class="form-group col-12">
+          <input type="text" placeholder="Email" class="form-control" name="email" id="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-12">
+          <input type="text" placeholder="Name" class="form-control" name="name" id="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-12">
+          <input type="text" placeholder="Mobile" class="form-control" name="mobile" id="">
+        </div>
+      </div>
+
+      <p>Already have account <a href="{% url 'login' %}">Login</a></p>
+      <button class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+</div>
+
+
+{% endblock %}

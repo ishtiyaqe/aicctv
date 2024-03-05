@@ -1,0 +1,117 @@
+ {% extends "object_detection/index.html" %}
+{% block content %}
+
+
+
+<div class="flex justify-center p-4">
+
+    <div class="col-6 mx-auto">
+        <h3 class="text-center text-xl font-normal p-2">Enter OTP sent to Your Number: <u>
+                <span class="mobile">
+                    {{mobile}}
+                </span>
+            </u> </h3>
+
+        {% if message %}
+        <div class="alert alert-{{class}}">
+            {{message}}
+        </div>
+        {% endif %}
+
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post">
+            {% csrf_token %}
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="otp">
+                    OTP
+                </label>
+                <input name="otp"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="otp" type="text" placeholder="OTP">
+            </div>
+
+            <div class="flex justify-center">
+                <button id="submit-btn"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit">Submit</button>
+                <button id="resend-btn"
+                    class="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="button" disabled>Resend OTP in 30s</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+    // Disable the submit button initially
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+
+    // Enable the submit button when the OTP input field is not empty
+    const otpInput = document.getElementById('otp');
+    otpInput.addEventListener('input', () => {
+        submitBtn.disabled = otpInput.value.trim() === '';
+    });
+
+    // Handle the resend button click
+
+    // var timeLeft = 30;
+    // var elem = document.getElementById('resend-btn');
+
+    // var timerId = setInterval(countdown, 1000);
+
+    // function countdown() {
+    //     if (timeLeft == -1) {
+    //         clearTimeout(timerId);
+    //         elem.disabled = false;
+    //         elem.innerText = 'Resend OTP';
+    //     } else {
+    //         elem.innerHTML = 'Resend OTP in ' + timeLeft + 's';
+    //         timeLeft--;
+    //     }
+    // }
+
+
+    var timeLeft = 1;
+    var elem = document.getElementById('resend-btn');
+    var timerId = setInterval(countdown, 1000);
+
+    function countdown() {
+        if (timeLeft == 0) {
+            clearInterval(timerId);
+            elem.disabled = false;
+            elem.innerText = 'Resend OTP';
+        } else {
+            elem.innerHTML = 'Resend OTP in ' + timeLeft + 's';
+            timeLeft--;
+        }
+    }
+
+    elem.addEventListener('click', function () {
+        timeLeft = 30;
+        elem.disabled = true;
+        elem.innerHTML = 'Resending...';
+        timerId = setInterval(countdown, 1000);
+        var xhr = new XMLHttpRequest();
+        var mobile = document.getElementsByClassName('mobile')[0].innerText
+        var url = '/resend-otp/' + encodeURIComponent(mobile);
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Request completed successfully
+                console.log('OTP resend request successful');
+            }
+        };
+        xhr.send();
+
+    });
+
+
+</script>
+
+
+
+{% endblock %}

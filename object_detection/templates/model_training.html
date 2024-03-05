@@ -1,0 +1,28 @@
+ {% extends "object_detection/index.html" %}
+ 
+ {% block content %}
+ <h1 class="text-center font-extrabold text-2xl m-10">
+    Object Detection Model Training Details
+  </h1>
+  <div
+    class="grid grid-cols-1 gap-4 text-center text-white font-md font-semibold"
+  >
+    <div class="p-4 bg-lime-600 rounded-md shadow-md flex flex-col">
+       <span class="whitespace-nowrap">
+       <b>Test total training set by admin panel</b>: {{Total_count}},
+       </span> 
+       <span class="whitespace-nowrap">
+        <b>Training Name</b>: {{Test_name}},
+       </span> 
+       <span class="whitespace-nowrap">
+        <b>Training Status</b>: {{Status}},
+       </span> 
+      
+    </div>
+    <a href="/">
+    <div class="p-4 bg-lime-600 rounded-md shadow-md cursor-pointer">
+            Return to Home
+          </div>
+        </a>
+        </div>
+ {% endblock %}

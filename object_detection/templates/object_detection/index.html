@@ -1,0 +1,27 @@
+<!-- object_detection/templates/object_detection/index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Object Detection Model Training</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="container flex flex-col justify-center ml-auto mr-auto">
+      <div class="p-4 inline-flex justify-between bg-lime-600 text-md font-semibold text-white">
+        <a href="/"> Home </a>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+            {% endif %}
+            <button type="submit">Sign Out</button>
+        </form>
+    {% endif %}
+      </div>
+       {% block content  %}{% endblock  %}
+    </div>
+  </body>
+</html>

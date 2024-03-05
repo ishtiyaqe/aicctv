@@ -1,0 +1,21 @@
+ {% extends "object_detection/index.html" %}
+ 
+ {% block content %}
+ <h1 class="text-center font-extrabold text-2xl m-10">
+    Object Detection Model Training
+  </h1>
+  <div
+    class="grid lg:grid-cols-2 grid-cols-1 gap-4 text-center text-white font-md font-semibold"
+  >
+  <a href="/download-training-data/">
+    <div class="p-4 bg-lime-600 rounded-md shadow-md cursor-pointer">
+            Download New Model Tarining Element
+        </div>
+    </a>
+    <a href="/model_train/">
+    <div class="p-4 bg-lime-600 rounded-md shadow-md cursor-pointer">
+            Start New Model Training
+        </div>
+    </a>
+  </div>
+ {% endblock %}

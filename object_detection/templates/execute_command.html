@@ -1,0 +1,54 @@
+{% extends "object_detection/index.html" %}
+ 
+{% block content %}
+    <h2>Execute Command</h2>
+    <form id="commandForm">
+        {% csrf_token %}
+        <label for="commandInput">Enter Command:</label>
+        <!-- Use textarea for multi-line input -->
+        <textarea id="commandInput" name="command" rows="4" required></textarea>
+        <!-- Include CSRF token in the form -->
+        {% csrf_token %}
+        <button type="submit">Execute</button>
+    </form>
+    <div id="output"></div>
+
+    <script>
+        $(document).ready(function () {
+            // Handle form submission
+            $('#commandForm').submit(function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get the command from the textarea
+                var command = $('#commandInput').val();
+
+                // Get the CSRF token
+                var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
+
+                // Make AJAX request to the backend with CSRF token included
+                $.ajax({
+                    url: '/execute_command/',
+                    type: 'POST',
+                    data: {
+                        'command': command
+                    },
+                    headers: {
+                        // Include CSRF token in the request headers
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function (response) {
+                        // Display output or error message
+                        if (response.output) {
+                            $('#output').text(response.output);
+                        } else if (response.error) {
+                            $('#output').text('Error: ' + response.error);
+                        }
+                    },
+                    error: function () {
+                        $('#output').text('Error: Failed to execute command.');
+                    }
+                });
+            });
+        });
+    </script>
+    {% endblock %}

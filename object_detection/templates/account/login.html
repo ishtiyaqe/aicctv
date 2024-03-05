@@ -1,0 +1,52 @@
+ {% extends "object_detection/index.html" %}
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li{% if message.tags %} class="{{ message.tags }} bg-blue-100 border border-red-400 text-red-700 px-4 py-3 rounded"
+    {% endif %}>
+    {{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% block content %}
+
+
+
+<div class="flex justify-center p-4">
+
+  <div class="col-6 mx-auto">
+    <h3 class="text-center text-3xl font-bold">Login</h3>
+    <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      {% csrf_token %}
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Username
+        </label>
+        <input required name="username"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="username" type="text"  placeholder="username">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Password
+        </label>
+        <input name="password"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="password" type="password" required placeholder="password">
+      </div>
+
+      <div class="flex justify-center">
+
+        <button
+          class=" bg-lime-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit">Login</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+
+{% endblock %}
