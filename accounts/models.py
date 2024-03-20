@@ -10,6 +10,6 @@ class CustomUser(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User ,on_delete=models.CASCADE)
-    mobile = models.CharField(max_length=20)
+    email = models.CharField(max_length=220)
     otp = models.CharField(max_length=6)
     
