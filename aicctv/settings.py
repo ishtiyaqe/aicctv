@@ -32,12 +32,13 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["backend.aicamer.com","127.0.0.1","aicamer.com",'www.backend.aicamer.com','www.aicamer.com']
+ALLOWED_HOSTS = ["backend.aicamer.com","66.29.143.204","127.0.0.1","ws://127.0.0.1:8001","aicamer.com",'www.backend.aicamer.com','www.aicamer.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'daphne',
     'channels',
     'rest_framework',
@@ -94,9 +95,20 @@ TEMPLATES = [
 ]
 ASGI_APPLICATION  = "aicctv.asgi.application"
 WSGI_APPLICATION = 'aicctv.wsgi.application'
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
+#     },
+# }
+
+
+
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     },
 }
 
