@@ -1,30 +1,51 @@
 from django.shortcuts import render, redirect
-from store.views import *
-from store.models import *
+from modelTraining.views import *
+from modelTraining.models import *
 from django.contrib.auth.models import User
 from .models import Profile
 import random
 import http.client
 from django.conf import settings
 from django.contrib.auth import authenticate, login, authenticate
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from django.contrib.auth.forms import AuthenticationForm
 
 
 
+def send_otp(email, otp):
+    # Sender email credentials
+    sender_email = "gishtiyatiqe033@gmail.com"
+    sender_password = "avjm jxtc ethk utur"
 
-def send_otp(mobile , otp):
-    print("FUNCTION CALLED")
-    url = "http://apismpp.ajuratech.com/sendtext"
+    # Recipient email
+    recipient_email = email
 
-    querystring = {"apikey":"a6584c5c4908024d","secretkey":"80b5d891","callerID":"quickcartbd","toUser":mobile,"messageContent":"Your otp is "+otp }
-    headers = {
-        'cache-control': "no-cache",
-        }
+    # SMTP server configuration
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587  # For Gmail
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
-    print(response)
-    return None
+    # Create a secure SSL context
+    try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(sender_email, sender_password)
+
+        # Email content
+        message = MIMEMultipart()
+        message['From'] = sender_email
+        message['To'] = recipient_email
+        message['Subject'] = "Your OTP"
+        message.attach(MIMEText(f"Aicamer.com\nYour OTP is: {otp}", 'plain'))
+
+        # Send email
+        server.sendmail(sender_email, recipient_email, message.as_string())
+        print("OTP email sent successfully")
+    except Exception as e:
+        print(f"Error sending OTP email: {e}")
+    finally:
+        server.quit()
 
 
 
