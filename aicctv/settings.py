@@ -362,10 +362,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000", 
     "https://66.29.143.204:8000", 
     "https://aicamer.com", 
+    "https://aicame.xyz", 
     "https://backend.aicamer.com", 
 ]
 CSRF_TRUSTED_ORIGINS = [
    'https://aicamer.com', 
+   'https://aicame.xyz', 
   'https://backend.aicamer.com', 
   'http://127.0.0.1:8080',
    'https://66.29.143.204:8000', 
