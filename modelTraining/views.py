@@ -72,6 +72,26 @@ from rest_framework.generics import CreateAPIView
 
 
 
+from rest_framework.permissions import AllowAny 
+
+class UserProfileEmailViews(APIView):
+    permission_classes = [AllowAny]  # Allow unrestricted acces
+    def get(self, request):
+        username = request.query_params.get('username')
+        if not username:
+            return Response("Username parameter is missing", status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(username=username)
+            profile = Profile.objects.get(user=user)
+            email = profile.email
+            return Response(email, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response("Profile not found", status=status.HTTP_404_NOT_FOUND)
+ 
+
 
 class UserProfileViews(APIView):
     def get(self, request):
@@ -90,6 +110,15 @@ class CameraWarningVideoListView(APIView):
     def get(self, request, camera_id):
         camera_warning_videos = CameraWarningVideoList.objects.filter(camera=camera_id)
         serializer = CameraWarningVideoListSerializer(camera_warning_videos, many=True)
+        return Response(serializer.data)
+     
+      
+class CameraWarningLabelListListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, camera_id):
+        camera_warning_videos = CameraWarningLabelList.objects.filter(camera=camera_id)
+        serializer = CameraWarningLabelListSerializer(camera_warning_videos, many=True)
         return Response(serializer.data)
     
       
@@ -169,28 +198,61 @@ class CameraCreateView(APIView):
             }
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         
-        
-        
+from accounts.views import *   
+from accounts.models import *   
+import random
+
 class UserLogin(APIView):
     permission_classes = (permissions.AllowAny,)
-    authentication_classes = (SessionAuthentication,)
 
     def post(self, request):
         data = request.data
         username = data.get('username')
         password = data.get('password')
         serializer = UserLoginSerializer(data=data)
+        
         if not username or not password:
             return Response({'error': 'Invalid input data'}, status=status.HTTP_400_BAD_REQUEST)
 
         user = serializer.check_user(data)
 
         if user is not None:
-            login(request, user)
-            return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+            otp = str(random.randint(1000, 9999))
+            kalaa = User.objects.get(id=user.id)
+            profile = Profile.objects.get(user=kalaa)
+            profile.otp = otp 
+            profile.save()
+            print(profile.email)
+            send_otp(profile.email, otp)
+            # Don't log the user in immediately, wait for OTP verification
+            return Response({'message': 'OTP sent to your email'}, status=status.HTTP_200_OK)
         else:
             error_message = 'User not found'
-            return JsonResponse({'error': error_message}, status=404)
+            return JsonResponse({'error': error_message}, status=status.HTTP_404_NOT_FOUND)
+class VerifyOTP(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        data = request.data
+        username = data.get('username')
+        otp = data.get('otp')
+
+        if not username or not otp:
+            return Response({'error': 'Invalid input data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(username=username).first()
+        if user:
+            profile = Profile.objects.get(user=user)
+            if profile.otp == otp:
+                login(request, user)
+                profile.otp = None  # Clear OTP after successful login
+                profile.save()
+                return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid OTP'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return JsonResponse({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class UserLogout(APIView):
 	permission_classes = (permissions.AllowAny,)
